@@ -1,9 +1,9 @@
 <div class="container">
-  <h2 style="text-align: center;">Basic CRUD</h2>
+  <h2 style="text-align: center;">CRUD</h2>
 
   <div class="content">
     <div class="form-section">
-      <h3>Details</h3>
+      <h3>{{ isEditMode ? 'Update Details' : 'Add Details' }}</h3>
       <form [formGroup]="form" (ngSubmit)="onSubmit()" class="crud-form">
         <div class="form-group">
           <label>ID</label>
@@ -24,8 +24,8 @@
         </div>
 
         <div class="form-actions">
-          <button type="submit" [disabled]="form.invalid">Save</button>
-          <button type="button" (click)="onClear()">Clear</button>
+          <button type="submit" [disabled]="form.invalid">{{ isEditMode ? 'Update' : 'Save' }}</button>
+          <button type="button" (click)="onClear()">{{ isEditMode ? 'Cancel' : 'Clear' }}</button>
         </div>
       </form>
     </div>
