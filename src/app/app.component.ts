@@ -12,32 +12,37 @@ export interface DataModel {
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
-  //Angular simple CRUD using array methods  (realtime coding)
-
-  constructor(private fb: FormBuilder) {}
   form!: FormGroup;
   dataList: DataModel[] = [];
-  editId!: number;
+  constructor(private fb: FormBuilder) { }
 
   ngOnInit() {
     this.form = this.fb.group({
-      id: [null, Validators.required],
-      name: [''],
+      id: [null, [Validators.required, Validators.min(1)]],
+      name: ['', [Validators.required, Validators.minLength(3)]]
     });
-    console.log(this.dataList);
+
   }
-  OnAdd() {
-    const value = this.form.value;
-    this.dataList = this.dataList.filter((item) => item.id !== value.id);
-    this.dataList.push(this.form.value);
+
+  onSubmit() {
+    const value = this.form.getRawValue();
+    this.dataList = this.dataList.filter(item => item.id !== value.id);
+    this.dataList.push(value);
     this.form.reset();
+    this.form.get('id')?.enable();
   }
 
   onEdit(item: DataModel) {
-    this.form.setValue({ ...item });
+    this.form.patchValue(item);
+    this.form.get('id')?.disable();
   }
 
-  onDelete(id: any) {
-    this.dataList = this.dataList.filter((item) => item.id !== id);
+  onDelete(id: number) {
+    this.dataList = this.dataList.filter(item => item.id !== id);
+  }
+
+  onClear() {
+    this.form.reset();
+    this.form.get('id')?.enable();
   }
 }
